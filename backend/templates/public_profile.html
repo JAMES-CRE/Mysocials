@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ data.display_name|default:data.username }} — {{ site_name }}</title>
+
+  <meta name="description" content="{{ data.bio|default:'All my links in one place.'|truncatechars:160 }}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ data.display_name|default:data.username }}">
+  <meta property="og:description" content="{{ data.bio|default:'All my links in one place.'|truncatechars:200 }}">
+  <meta property="og:url" content="{{ page_url }}">
+  {% if data.avatar_url %}<meta property="og:image" content="{{ data.avatar_url }}">{% endif %}
+  <meta property="og:site_name" content="{{ site_name }}">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ data.display_name|default:data.username }}">
+  <meta name="twitter:description" content="{{ data.bio|default:'All my links in one place.'|truncatechars:200 }}">
+  {% if data.avatar_url %}<meta name="twitter:image" content="{{ data.avatar_url }}">{% endif %}
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0; padding: 0;
+      background: #f4f4f5;
+      color: #18181b;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 24px;
+      max-width: 440px; width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+    .avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      object-fit: cover; margin: 0 auto 16px;
+      background: #e4e4e7;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; color: #71717a; font-weight: 600;
+    }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    .handle { color: #71717a; font-size: 14px; margin-bottom: 12px; }
+    .bio { color: #3f3f46; font-size: 15px; line-height: 1.5; margin-bottom: 24px; }
+    .links { display: flex; flex-direction: column; gap: 10px; }
+    a.link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      background: #18181b; color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 15px; font-weight: 500;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    a.link:hover { transform: translateY(-1px); opacity: .9; }
+    a.link .arrow { opacity: .6; }
+    .footer { margin-top: 24px; font-size: 12px; color: #a1a1aa; }
+    .footer a { color: #a1a1aa; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    {% if data.avatar_url %}
+      <img class="avatar" src="{{ data.avatar_url }}" alt="{{ data.display_name|default:data.username }}">
+    {% else %}
+      <div class="avatar">{{ data.username|slice:":1"|upper }}</div>
+    {% endif %}
+
+    <h1>{{ data.display_name|default:data.username }}</h1>
+    <div class="handle">@{{ data.username }}</div>
+
+    {% if data.bio %}<p class="bio">{{ data.bio }}</p>{% endif %}
+
+    <div class="links">
+      {% for link in data.links %}
+        <a class="link" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+          <span>{{ link.label|default:link.platform_display }}</span>
+          <span class="arrow">→</span>
+        </a>
+      {% empty %}
+        <p style="color:#a1a1aa;">No links yet.</p>
+      {% endfor %}
+    </div>
+
+    <div class="footer">
+      Powered by <a href="/">{{ site_name }}</a>
+    </div>
+  </div>
+</body>
+</html>
